@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Estore\Admin\Catalog;
 
-use App\Http\Requests\StoreProductRequest;
-use App\Http\Requests\UpdateProductRequest;
-use App\Models\Estore\Catalog\Product;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Estore\Admin\Catalog\StoreSectionRequest;
+use App\Http\Requests\Estore\Admin\Catalog\UpdateSectionRequest;
+use App\Models\Estore\Catalog\Section;
 
-class ProductController extends Controller
+class AdminSectionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +28,7 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProductRequest $request)
+    public function store(StoreSectionRequest $request)
     {
         //
     }
@@ -35,7 +36,7 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Product $product)
+    public function show(Section $section)
     {
         //
     }
@@ -43,7 +44,7 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Section $section)
     {
         //
     }
@@ -51,7 +52,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(UpdateSectionRequest $request, Section $section)
     {
         //
     }
@@ -59,7 +60,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Section $section)
     {
         //
     }

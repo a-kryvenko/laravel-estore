@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('slug');
             $table->integer('parent_section_id')->nullable();
             $table->text('description')->nullable();
-            $table->integer('updated_by');
+            $table->integer('updated_by')->nullable();
             $table->integer('products_count')->default(0);
         });
     }

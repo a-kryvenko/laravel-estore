@@ -2,7 +2,9 @@
 
 namespace App\Models\Estore\Catalog;
 
+use App\Enums\Catalog\PropertyType;
 use App\Models\User;
+use App\Traits\HasUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -11,11 +13,24 @@ use Spatie\MediaLibrary\MediaCollections\Models\Concerns\HasUuid;
 
 class Property extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid, HasUpdatedBy;
 
     protected $guarded = [
+        'uuid',
         'updated_by'
     ];
+
+    protected $casts = [
+        'type' => PropertyType::class
+    ];
+
+    public function setTypeAttribute($value)
+    {
+        if ($this->type) {
+            return;
+        }
+        $this->attributes['type'] = $value;
+    }
 
     public function enums(): HasMany
     {
@@ -39,5 +54,10 @@ class Property extends Model
             $property->enums()->delete();
             $property->productsValues()->delete();
         });
+    }
+
+    public function uniqueIds()
+    {
+        return ['uuid'];
     }
 }

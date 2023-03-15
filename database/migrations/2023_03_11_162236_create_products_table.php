@@ -31,7 +31,7 @@ return new class extends Migration
             $table->integer('weight')->nullable();
             $table->integer('package_id')->nullable();
             $table->text('description')->nullable();
-            $table->integer('updated_by');
+            $table->integer('updated_by')->nullable();
             $table->integer('views_count')->default(0);
         });
     }
