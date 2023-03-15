@@ -9,7 +9,7 @@ class StorePropertyEnumService
 {
     public function store(int $propertyId, array $enumFields): int
     {
-        $id = $enumFields['id'] ?: 0;
+        $id = !empty($enumFields['id']) ? $enumFields['id'] : 0;
         unset($enumFields['id']);
 
         if (!$id) {
