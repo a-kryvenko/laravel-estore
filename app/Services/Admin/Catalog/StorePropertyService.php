@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Catalog;
+namespace App\Services\Admin\Catalog;
 
 use App\Enums\Catalog\PropertyType;
 use App\Http\Requests\Estore\Admin\Catalog\StorePropertyRequest;
@@ -58,7 +58,7 @@ class StorePropertyService
      * @return void
      * @throws Exception
      */
-    public function update(UpdatePropertyRequest $request, Property $property)
+    public function update(UpdatePropertyRequest $request, Property $property): void
     {
         try {
             DB::beginTransaction();
@@ -78,6 +78,22 @@ class StorePropertyService
                 $this->storePropertyEnumService->sync($property, $enums);
             }
 
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * @param Property $property
+     * @return void
+     */
+    public function delete(Property $property): void
+    {
+        try {
+            DB::beginTransaction();
+            $property->delete();
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();

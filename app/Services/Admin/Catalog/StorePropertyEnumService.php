@@ -1,13 +1,9 @@
 <?php
 
-namespace App\Services\Catalog;
+namespace App\Services\Admin\Catalog;
 
-use App\Enums\Catalog\PropertyType;
-use App\Http\Requests\Estore\Admin\Catalog\StorePropertyRequest;
 use App\Models\Estore\Catalog\Property;
 use App\Models\Estore\Catalog\PropertyEnum;
-use Exception;
-use Illuminate\Support\Facades\DB;
 
 class StorePropertyEnumService
 {

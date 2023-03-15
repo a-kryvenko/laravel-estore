@@ -6,7 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Estore\Admin\Catalog\StorePropertyRequest;
 use App\Http\Requests\Estore\Admin\Catalog\UpdatePropertyRequest;
 use App\Models\Estore\Catalog\Property;
-use App\Services\Catalog\StorePropertyService;
+use App\Services\Admin\Catalog\StorePropertyService;
+use Exception;
 
 class AdminPropertyController extends Controller
 {
@@ -15,7 +16,10 @@ class AdminPropertyController extends Controller
      */
     public function index()
     {
-        return view('admin.catalog.properties.index');
+        $properties = Property::latest()->get();
+        return view('admin.catalog.properties.index', [
+            'properties' => $properties
+        ]);
     }
 
     /**
@@ -40,7 +44,7 @@ class AdminPropertyController extends Controller
                 return redirect()->route('admin.catalog.properties.index')->with('success', 'Property has ben created');
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('admin.catalog.properties.create')
                 ->withInput()
                 ->withErrors(['storing_error' => $e->getMessage()]);
@@ -52,7 +56,7 @@ class AdminPropertyController extends Controller
      */
     public function show(Property $property)
     {
-        //
+        return redirect()->route('admin.catalog.properties.edit', $property->id);
     }
 
     /**
@@ -77,7 +81,7 @@ class AdminPropertyController extends Controller
                 return redirect()->route('admin.catalog.properties.index')->with('success', 'Property has ben updated');
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return redirect()->route('admin.catalog.properties.edit', $property->id)
                 ->withInput()
                 ->withErrors(['storing_error' => $e->getMessage()]);
@@ -87,8 +91,9 @@ class AdminPropertyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Property $property)
+    public function destroy(Property $property, StorePropertyService $service)
     {
-        //
+        $service->delete($property);
+        return redirect()->route('admin.catalog.properties.index')->with('success', 'Property has ben deleted');
     }
 }

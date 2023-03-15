@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Catalog;
+namespace App\Services\Admin\Catalog;
 
 use App\Http\Requests\Estore\Admin\Catalog\StoreProductRequest;
 use App\Models\Estore\Catalog\Product;

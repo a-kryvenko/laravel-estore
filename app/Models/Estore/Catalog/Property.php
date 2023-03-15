@@ -47,7 +47,6 @@ class Property extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-
     protected static function booted(): void
     {
         static::deleted(function (Property $property) {

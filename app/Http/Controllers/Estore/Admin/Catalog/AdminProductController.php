@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Estore\Admin\Catalog;
 
-use App\Enums\Catalog\ProductStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Estore\Admin\Catalog\StoreProductRequest;
 use App\Http\Requests\Estore\Admin\Catalog\UpdateProductRequest;
 use App\Models\Estore\Catalog\Product;
-use App\Services\Catalog\StoreProductService;
+use App\Services\Admin\Catalog\StoreProductService;
 
 class AdminProductController extends Controller
 {
