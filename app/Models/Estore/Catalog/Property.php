@@ -32,7 +32,7 @@ class Property extends Model
         $this->attributes['type'] = $value;
     }
 
-    public function enums(): HasMany
+    public function propertyEnums(): HasMany
     {
         return $this->hasMany(PropertyEnum::class);
     }

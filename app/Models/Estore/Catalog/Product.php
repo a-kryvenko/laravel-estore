@@ -2,6 +2,7 @@
 
 namespace App\Models\Estore\Catalog;
 
+use App\Enums\Catalog\ProductStatus;
 use App\Models\User;
 use App\Traits\HasUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,10 @@ class Product extends Model implements HasMedia
     protected $guarded = [
         'uuid',
         'updated_by'
+    ];
+
+    protected $casts = [
+        'status' => ProductStatus::class
     ];
 
     public function canonicalSection(): BelongsTo

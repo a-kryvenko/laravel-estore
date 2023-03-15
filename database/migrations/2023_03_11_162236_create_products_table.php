@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->uuid()->unique();
-            $table->integer('status_id');
+            $table->string('status');
             $table->boolean('available')->default(false);
             $table->integer('sort')->default(100);
             $table->string('sku')->nullable();

@@ -503,7 +503,7 @@
                     </div>
                 @endif
 
-                <div class="p-4">
+                <div class="">
                     {{ $slot }}
                 </div>
             </main>
