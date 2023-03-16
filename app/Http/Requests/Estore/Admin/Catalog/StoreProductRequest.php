@@ -21,12 +21,11 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status_id' => 'required|integer',
-            'available' => 'required|boolean',
-            'sort' => 'required|integer',
-            'sku' => 'required',
-            'name' => 'required',
-            'slug' => 'required',
+            'status' => 'required|string',
+            'sort' => 'nullable|integer',
+            'sku' => 'required|string',
+            'name' => 'required|string',
+            'slug' => 'required|string',
             'canonical_section' => 'nullable|integer',
             'purchasing_price' => 'required|numeric',
             'base_price' => 'required|numeric',
@@ -35,8 +34,9 @@ class StoreProductRequest extends FormRequest
             'height' => 'nullable|integer',
             'length' => 'nullable|integer',
             'weight' => 'nullable|integer',
-            'package' => 'nullable|integer',
+            'package' => 'nullable|string',
             'description' => 'nullable|string',
+            'properties.*' => 'nullable'
         ];
     }
 }

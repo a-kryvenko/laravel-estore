@@ -3,6 +3,8 @@
 namespace App\Models\Estore\Catalog;
 
 use App\Enums\Catalog\PropertyType;
+use App\Models\Scopes\ActiveScope;
+use App\Models\Scopes\OrderedScope;
 use App\Models\User;
 use App\Traits\HasUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -32,7 +34,7 @@ class Property extends Model
         $this->attributes['type'] = $value;
     }
 
-    public function propertyEnums(): HasMany
+    public function enums(): HasMany
     {
         return $this->hasMany(PropertyEnum::class);
     }
@@ -49,6 +51,9 @@ class Property extends Model
 
     protected static function booted(): void
     {
+        static::addGlobalScope(new ActiveScope());
+        static::addGlobalScope(new OrderedScope());
+
         static::deleted(function (Property $property) {
             $property->enums()->delete();
             $property->productsValues()->delete();

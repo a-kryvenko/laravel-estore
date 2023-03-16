@@ -9,4 +9,6 @@ enum PropertyType: string
     case FLOAT = 'F';
     case ENUM = 'E';
     case COLOR = 'C';
+
+    case TEXT = 'T';
 }
