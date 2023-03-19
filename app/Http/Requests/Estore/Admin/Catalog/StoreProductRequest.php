@@ -36,7 +36,7 @@ class StoreProductRequest extends FormRequest
             'weight' => 'nullable|integer',
             'package' => 'nullable|string',
             'description' => 'nullable|string',
-            'properties.*' => 'nullable'
+            'properties.*' => 'nullable|array'
         ];
     }
 }

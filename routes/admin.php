@@ -20,7 +20,7 @@ Route::name('admin.')
                 Route::resources([
                     'properties' => AdminPropertyController::class,
                     'sections' => AdminSectionController::class,
-                    'products' => AdminProductController::class
+                    'products' => AdminProductController::class,
                 ]);
             });
     });

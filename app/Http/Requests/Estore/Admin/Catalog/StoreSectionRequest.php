@@ -11,7 +11,14 @@ class StoreSectionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
+    }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'active' => $this->request->has('active')
+        ]);
     }
 
     /**
@@ -22,7 +29,12 @@ class StoreSectionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'active' => 'boolean',
+            'sort' => 'nullable|integer',
+            'name' => 'required|string',
+            'slug' => 'required|string',
+            'parent_section_id' => 'nullable|integer',
+            'description' => 'nullable|string',
         ];
     }
 }

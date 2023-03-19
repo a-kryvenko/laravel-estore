@@ -43,7 +43,8 @@ class Product extends Model implements HasMedia
 
     public function properties(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class, 'product_property_values')
+        return $this->belongsToMany(Property::class)
+            ->using(ProductPropertyValue::class)
             ->as('property_values')
             ->withPivot('value');
     }
@@ -51,8 +52,8 @@ class Product extends Model implements HasMedia
     protected static function booted(): void
     {
         static::deleted(function (Product $product) {
-            ProductPropertyValue::where('product_id', $product->id)->delete();
-            ProductSection::where('product_id', $product->id)->delete();
+            $product->properties()->detach();
+            $product->sections()->detach();
         });
     }
 

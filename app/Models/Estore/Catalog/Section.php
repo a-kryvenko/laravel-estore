@@ -7,10 +7,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Spatie\MediaLibrary\MediaCollections\Models\Concerns\HasUuid;
 
 class Section extends Model
 {
-    use HasFactory;
+    use HasFactory, HasUuid;
+
+    protected $guarded = [
+        'uuid'
+    ];
 
     public function parent(): BelongsTo
     {
@@ -25,5 +30,10 @@ class Section extends Model
     public function editor(): BelongsTo
     {
         return $this->belongsTo(User::class, 'updated_by');
+    }
+
+    public function uniqueIds()
+    {
+        return ['uuid'];
     }
 }

@@ -10,14 +10,61 @@ use Illuminate\Support\Facades\DB;
 
 class StoreProductService
 {
+    /**
+     * @param StoreProductRequest $request
+     * @return Product
+     * @throws Exception
+     */
     public function store(StoreProductRequest $request): Product
     {
-        return Product::create($request->validated());
+        try {
+            DB::beginTransaction();
+
+            $product = Product::create($request->safe()->except(['properties', 'sections']));
+
+            $propertiesRequest = $request->safe()->only('properties');
+            foreach ($propertiesRequest['properties'] as $propertyId => $propertyValues) {
+                foreach ($propertyValues as $value) {
+                    $product->properties()->attach($propertyId, ['value' => $value]);
+                }
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $product;
     }
 
+    /**
+     * @param Product $product
+     * @param UpdateProductRequest $request
+     * @return void
+     * @throws Exception
+     */
     public function update(Product $product, UpdateProductRequest $request)
     {
+        try {
+            DB::beginTransaction();
 
+            $product->update($request->safe()->except(['properties', 'sections']));
+
+            $product->properties()->detach();
+
+            $propertiesRequest = $request->safe()->only('properties');
+            foreach ($propertiesRequest['properties'] as $propertyId => $propertyValues) {
+                foreach ($propertyValues as $value) {
+                    $product->properties()->attach($propertyId, ['value' => $value]);
+                }
+            }
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**
@@ -29,9 +76,7 @@ class StoreProductService
     {
         try {
             DB::beginTransaction();
-
             $product->delete();
-
             DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
