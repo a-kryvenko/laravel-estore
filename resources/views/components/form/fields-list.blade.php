@@ -20,7 +20,7 @@
                 </x-form.select>
                 @break
             @case(\App\Enums\Catalog\PropertyType::BOOLEAN)
-                <x-form.checkbox
+                <x-form.input-checkbox
                     :label="$field['label']"
                     :name="$field['name']"
                     :checked="$field['value']"
