@@ -9,7 +9,7 @@ Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
 });
 Breadcrumbs::for('admin.catalog', function (BreadcrumbTrail $trail) {
     $trail->parent('admin.dashboard');
-    $trail->push('Catalog', route('admin.catalog.list'));
+    $trail->push('Catalog', route('admin.catalog.index'));
 });
 Breadcrumbs::for('admin.catalog.products', function (BreadcrumbTrail $trail) {
     $trail->parent('admin.catalog');
