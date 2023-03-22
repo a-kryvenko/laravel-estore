@@ -3,12 +3,11 @@
     'label' => '',
     'value' => ''
 ])
-
 @isset($label)
-    <label
-        for="{{ $name }}"
-        class="text-gray-900 dark:text-white block mb-2 text-sm font-medium"
-    >{{ $label }}</label>
+    <x-form.input-label
+        :name="$name"
+        :label="$label"
+    />
 @endisset
 
 <textarea

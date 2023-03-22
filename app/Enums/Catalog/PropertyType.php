@@ -12,4 +12,5 @@ enum PropertyType: string
     case COLOR = 'C';
 
     case TEXT = 'T';
+    case FILE = 'FI';
 }

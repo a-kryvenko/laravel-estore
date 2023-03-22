@@ -14,7 +14,7 @@
 @endisset
 @foreach($values as $value)
     <div class="mb-2">
-        <x-form.input-text
+        <x-form.input-file
             :name="$name . '[]'"
             :value="$value"
         />
@@ -22,7 +22,7 @@
 @endforeach
 @for($i = 0; $i < 4; $i ++)
     <div class="mb-2">
-        <x-form.input-text
+        <x-form.input-file
             :name="$name . '[]'"
             :value="''"
         />

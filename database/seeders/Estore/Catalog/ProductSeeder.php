@@ -15,28 +15,51 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-        $enumProperties = Property::factory(2)
-            ->has(PropertyEnum::factory(4))
+        $enumProperties = Property::factory(1)
+            ->has(PropertyEnum::factory(4), 'enums')
             ->create([
                 'type' => PropertyType::ENUM
             ]);
 
-        $stringProperties = Property::factory(2)
+        $stringProperties = Property::factory(1)
             ->create([
                 'type' => PropertyType::STRING
             ]);
 
-        $floatProperties = Property::factory(2)
+        $floatProperties = Property::factory(1)
             ->create([
                 'type' => PropertyType::FLOAT
             ]);
 
-        $numberProperties = Property::factory(2)
+        $numberProperties = Property::factory(1)
             ->create([
                 'type' => PropertyType::NUMBER
             ]);
 
-        // Create properties
+        $enumMultipleProperties = Property::factory(1)
+            ->has(PropertyEnum::factory(4), 'enums')
+            ->create([
+                'type' => PropertyType::ENUM,
+                'multiple' => true
+            ]);
+
+        $stringMultipleProperties = Property::factory(1)
+            ->create([
+                'type' => PropertyType::STRING,
+                'multiple' => true
+            ]);
+
+        $floatMultipleProperties = Property::factory(1)
+            ->create([
+                'type' => PropertyType::FLOAT,
+                'multiple' => true
+            ]);
+
+        $numberMultipleProperties = Property::factory(1)
+            ->create([
+                'type' => PropertyType::NUMBER,
+                'multiple' => true
+            ]);
 
         // Create products
     }

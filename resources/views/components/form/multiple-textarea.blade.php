@@ -1,10 +1,7 @@
 @props([
     'name' => '',
     'label' => '',
-    'values' => [],
-    'placeholder' => '',
-    'success' => false,
-    'error' => false
+    'value' => ''
 ])
 @isset($label)
     <x-form.input-label
@@ -14,7 +11,7 @@
 @endisset
 @foreach($values as $value)
     <div class="mb-2">
-        <x-form.input-text
+        <x-form.textarea
             :name="$name . '[]'"
             :value="$value"
         />
@@ -22,9 +19,11 @@
 @endforeach
 @for($i = 0; $i < 4; $i ++)
     <div class="mb-2">
-        <x-form.input-text
+        <x-form.textarea
             :name="$name . '[]'"
-            :value="''"
+            :value=""
         />
     </div>
 @endfor
+
+

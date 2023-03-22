@@ -1,39 +1,94 @@
+@php use App\Enums\Catalog\PropertyType; @endphp
 @props([
     'fields'
 ])
 
 @foreach($fields as $field)
     <x-form.input-wrap>
-        @switch($field['type'])
-            @case(\App\Enums\Catalog\PropertyType::TEXT)
-                <x-form.textarea
-                    :label="$field['label']"
-                    :name="$field['name']"
-                    :value="$field['value']"
-                />
-                @break
-            @case(\App\Enums\Catalog\PropertyType::ENUM)
-                <x-form.select name="{{ $field['name'] }}" label="{{ $field['label'] }}">
-                    @foreach($field['options'] as $option)
-                        <option value="{{ $option['value'] }}" {{ $option['checked'] ? 'checked' : '' }}>{{ $option['title'] }}</option>
-                    @endforeach
-                </x-form.select>
-                @break
-            @case(\App\Enums\Catalog\PropertyType::BOOLEAN)
-                <x-form.input-checkbox
-                    :label="$field['label']"
-                    :name="$field['name']"
-                    :checked="$field['value']"
-                />
-                @break
-            @default
-                <x-form.input-text
-                    :label="$field['label']"
-                    :name="$field['name']"
-                    :value="$field['value']"
-                    :placeholder="''"
-                />
-                @break
-        @endswitch
+        @if(isset($field['multiple']) && $field['multiple'])
+            @switch($field['type'])
+                @case(PropertyType::FILE)
+                    <x-form.multiple-input-file
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :value="''"
+                    />
+                    @break
+                @case(PropertyType::TEXT)
+                    <x-form.multiple-textarea
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :value="$field['value']"
+                    />
+                    @break
+                @case(PropertyType::ENUM)
+                    <x-form.select
+                        :name="$field['name']"
+                        :label="$field['label']"
+                        :multiple="true"
+                    >
+                        @foreach($field['options'] as $option)
+                            <option
+                                value="{{ $option['value'] }}" {{ $option['checked'] ? 'checked' : '' }}>{{ $option['title'] }}</option>
+                        @endforeach
+                    </x-form.select>
+                    @break
+                @case(PropertyType::BOOLEAN)
+                    <x-form.input-checkbox
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :checked="$field['value']"
+                    />
+                    @break
+                @default
+                    <x-form.multiple-input-text
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :values="$field['values']"
+                        :placeholder="''"
+                    />
+                    @break
+            @endswitch
+        @else
+            @switch($field['type'])
+                @case(PropertyType::FILE)
+                    <x-form.input-file
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :value="''"
+                    />
+                    @break
+                @case(PropertyType::TEXT)
+                    <x-form.textarea
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :value="$field['value']"
+                    />
+                    @break
+                @case(PropertyType::ENUM)
+                    <x-form.select name="{{ $field['name'] }}" label="{{ $field['label'] }}">
+                        @foreach($field['options'] as $option)
+                            <option
+                                value="{{ $option['value'] }}" {{ $option['checked'] ? 'checked' : '' }}>{{ $option['title'] }}</option>
+                        @endforeach
+                    </x-form.select>
+                    @break
+                @case(PropertyType::BOOLEAN)
+                    <x-form.input-checkbox
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :checked="$field['value']"
+                    />
+                    @break
+                @default
+                    <x-form.input-text
+                        :label="$field['label']"
+                        :name="$field['name']"
+                        :value="$field['value']"
+                        :placeholder="''"
+                    />
+                    @break
+            @endswitch
+        @endif
     </x-form.input-wrap>
 @endforeach

@@ -20,13 +20,19 @@ class StoreProductService
         try {
             DB::beginTransaction();
 
-            $product = Product::create($request->safe()->except(['properties', 'sections']));
+            $product = Product::create($request->safe()->except(['properties', 'sections', 'images']));
 
             $propertiesRequest = $request->safe()->only('properties');
             foreach ($propertiesRequest['properties'] as $propertyId => $propertyValues) {
                 foreach ($propertyValues as $value) {
                     $product->properties()->attach($propertyId, ['value' => $value]);
                 }
+            }
+
+            $imagesRequest = $request->safe()->only('images');
+
+            foreach ($imagesRequest['images'] as $image) {
+                $product->addMediaFromRequest($image)->toMediaCollection('images');
             }
 
             DB::commit();
@@ -49,7 +55,7 @@ class StoreProductService
         try {
             DB::beginTransaction();
 
-            $product->update($request->safe()->except(['properties', 'sections']));
+            $product->update($request->safe()->except(['properties', 'sections', 'images']));
 
             $product->properties()->detach();
 
@@ -58,6 +64,11 @@ class StoreProductService
                 foreach ($propertyValues as $value) {
                     $product->properties()->attach($propertyId, ['value' => $value]);
                 }
+            }
+
+            $imagesRequest = $request->safe()->only('images');
+            foreach ($imagesRequest['images'] as $image) {
+                $product->addMediaFromRequest($image)->toMediaCollection('images');
             }
 
             DB::commit();
