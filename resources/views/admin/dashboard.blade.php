@@ -1,3 +1,3 @@
-<x-admin-layout>
+<x-admin>
     <h1>yest</h1>
-</x-admin-layout>
+</x-admin>

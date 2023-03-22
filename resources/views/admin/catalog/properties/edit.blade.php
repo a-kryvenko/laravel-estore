@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin>
     <div class="p-4">
         <form action="{{ route('admin.catalog.properties.update', $property->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -181,4 +181,4 @@
 
         </script>
     </div>
-</x-admin-layout>
+</x-admin>

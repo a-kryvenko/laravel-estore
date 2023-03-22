@@ -1,4 +1,4 @@
-<x-admin-layout>
+<x-admin>
     <div class="p-4">
         <form action="{{ route('admin.catalog.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -20,4 +20,4 @@
             </div>
         </form>
     </div>
-</x-admin-layout>
+</x-admin>

@@ -24,7 +24,7 @@ class AdminLayout extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('layouts.admin-layout', [
+        return view('layouts.admin', [
             'menu' => $this->buildAdminMenu()
         ]);
     }
