@@ -1,4 +1,4 @@
-<x-admin>
+<x-admin-layout>
     <div class="p-4">
         <form action="{{ route('admin.catalog.properties.update', $property->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
@@ -91,7 +91,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($property->propertyEnums as $enum)
+                            @foreach($property->enums as $enum)
                                 <tr>
                                     <td>
                                         <input type="hidden" name="enums[{{ $enum->id }}][id]" value="{{ $enum->id }}" />
@@ -181,4 +181,4 @@
 
         </script>
     </div>
-</x-admin>
+</x-admin-layout>
