@@ -111,7 +111,7 @@ class AdminProductController extends Controller
             $statuses[] = [
                 'value' => $status->value,
                 'title' => $status->name,
-                'checked' => (old('sku') ?? $product->status) == $status->value
+                'selected' => (old('sku') ?? $product->status) == $status->value
             ];
         }
         $packages = [];
@@ -119,7 +119,7 @@ class AdminProductController extends Controller
             $packages[] = [
                 'value' => $package->value,
                 'title' => $package->name,
-                'checked' => (old('sku') ?? $product->package) == $package->value
+                'selected' => (old('sku') ?? $product->package) == $package->value
             ];
         }
 
@@ -158,40 +158,42 @@ class AdminProductController extends Controller
 
             if ($property->multiple) {
                 $values = [];
-                $productPropertyValues = $product->properties->where('property_id', $property->id)->first()?->property_values;
+                $productPropertyValues = $product->propertyValues()->where('property_id', $property->id)->get();
                 if ($productPropertyValues) {
                     foreach ($productPropertyValues as $productPropertyValue) {
                         $values[$productPropertyValue->id] = $productPropertyValue->value;
                     }
                 }
-                if (old('properties.' . $property->id)) {
+                $oldValues = old('properties.' . $property->id);
+                if (!empty($oldValues)) {
                     foreach (old('properties.' . $property->id) as $id => $value) {
                         if (!empty($value)) {
                             $values[$id] = $value;
                         }
                     }
                 }
+
                 if ($property->type == PropertyType::ENUM) {
                     $field['options'] = [];
                     foreach ($property->enums as $enum) {
                         $field['options'][] = [
                             'value' => $enum->id,
                             'title' => $enum->name,
-                            'checked' => in_array($enum->id, $values)
+                            'selected' => in_array($enum->id, $values)
                         ];
                     }
                 } else {
                     $field['values'] = $values;
                 }
             } else {
-                $productPropertyValue = $product->properties->where('property_id', $property->id)->first()?->property_values->value;
+                $productPropertyValue = $product->propertyValues()->where('property_id', $property->id)->first()?->value;
                 if ($property->type == PropertyType::ENUM) {
                     $field['options'] = [];
                     foreach ($property->enums as $enum) {
                         $field['options'][] = [
                             'value' => $enum->id,
                             'title' => $enum->name,
-                            'checked' => (old($fieldName) ?? $productPropertyValue) == $enum->id
+                            'selected' => (old($fieldName) ?? $productPropertyValue) == $enum->id
                         ];
                     }
                 } else {

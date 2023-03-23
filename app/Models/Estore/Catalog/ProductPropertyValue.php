@@ -10,6 +10,14 @@ class ProductPropertyValue extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
+    protected $fillable = [
+        'value',
+        'product_id',
+        'property_id'
+    ];
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

@@ -37,7 +37,7 @@ class StoreProductRequest extends FormRequest
             'package' => 'nullable|string',
             'description' => 'nullable|string',
             'properties.*' => 'nullable',
-            'images.*' => 'nullable|array|image'
+            'images.*' => 'nullable|image'
         ];
     }
 }

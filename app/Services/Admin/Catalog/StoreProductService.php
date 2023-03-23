@@ -23,17 +23,12 @@ class StoreProductService
             $product = Product::create($request->safe()->except(['properties', 'sections', 'images']));
 
             $propertiesRequest = $request->safe()->only('properties');
-            foreach ($propertiesRequest['properties'] as $propertyId => $propertyValues) {
-                foreach ($propertyValues as $value) {
-                    $product->properties()->attach($propertyId, ['value' => $value]);
-                }
-            }
-
             $imagesRequest = $request->safe()->only('images');
-
-            foreach ($imagesRequest['images'] as $image) {
-                $product->addMediaFromRequest($image)->toMediaCollection('images');
-            }
+            $this->setDataFromRequest(
+                $product,
+                isset($propertiesRequest['properties']) ? $propertiesRequest['properties'] : null,
+                isset($imagesRequest['images']) ? $imagesRequest['images'] : null
+            );
 
             DB::commit();
         } catch (Exception $e) {
@@ -57,19 +52,13 @@ class StoreProductService
 
             $product->update($request->safe()->except(['properties', 'sections', 'images']));
 
-            $product->properties()->detach();
-
             $propertiesRequest = $request->safe()->only('properties');
-            foreach ($propertiesRequest['properties'] as $propertyId => $propertyValues) {
-                foreach ($propertyValues as $value) {
-                    $product->properties()->attach($propertyId, ['value' => $value]);
-                }
-            }
-
             $imagesRequest = $request->safe()->only('images');
-            foreach ($imagesRequest['images'] as $image) {
-                $product->addMediaFromRequest($image)->toMediaCollection('images');
-            }
+            $this->setDataFromRequest(
+                $product,
+                isset($propertiesRequest['properties']) ? $propertiesRequest['properties'] : null,
+                isset($imagesRequest['images']) ? $imagesRequest['images'] : null
+            );
 
             DB::commit();
         } catch (Exception $e) {
@@ -92,6 +81,38 @@ class StoreProductService
         } catch (Exception $e) {
             DB::rollBack();
             throw $e;
+        }
+    }
+
+    private function setDataFromRequest(Product $product, ?array $properties, ?array $images): void
+    {
+        if (!empty($properties)) {
+            foreach ($properties as $propertyId => $propertyValues) {
+                if (empty($propertyValues)) {
+                    continue;
+                }
+                if (is_array($propertyValues)) {
+                    foreach ($propertyValues as $value) {
+                        if (!empty($value)) {
+                            $product->propertyValues()->firstOrCreate(
+                                ['property_id' => $propertyId],
+                                ['value' => $value]
+                            );
+                        }
+                    }
+                } else {
+                    $product->propertyValues()->firstOrCreate(
+                        ['property_id' => $propertyId],
+                        ['value' => $propertyValues]
+                    );
+                }
+            }
+        }
+
+        if (!empty($images)) {
+            foreach ($images as $image) {
+                $product->addMediaFromRequest($image)->toMediaCollection('images');
+            }
         }
     }
 }

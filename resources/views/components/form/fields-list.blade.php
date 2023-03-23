@@ -29,7 +29,7 @@
                     >
                         @foreach($field['options'] as $option)
                             <option
-                                value="{{ $option['value'] }}" {{ $option['checked'] ? 'checked' : '' }}>{{ $option['title'] }}</option>
+                                value="{{ $option['value'] }}" {{ $option['selected'] ? 'selected' : '' }}>{{ $option['title'] }}</option>
                         @endforeach
                     </x-form.select>
                     @break
@@ -69,7 +69,7 @@
                     <x-form.select name="{{ $field['name'] }}" label="{{ $field['label'] }}">
                         @foreach($field['options'] as $option)
                             <option
-                                value="{{ $option['value'] }}" {{ $option['checked'] ? 'checked' : '' }}>{{ $option['title'] }}</option>
+                                value="{{ $option['value'] }}" {{ $option['selected'] ? 'selected' : '' }}>{{ $option['title'] }}</option>
                         @endforeach
                     </x-form.select>
                     @break
