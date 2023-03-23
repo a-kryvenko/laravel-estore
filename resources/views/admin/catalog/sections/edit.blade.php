@@ -1,4 +1,8 @@
 <x-admin-layout>
+    <x-slot:pageTitle>
+        Edit section {{ $section->name }}
+    </x-slot:pageTitle>
+
     <div class="p-4">
         <form action="{{ route('admin.catalog.sections.update', $section->id) }}" method="POST" enctype="multipart/form-data">
             @csrf

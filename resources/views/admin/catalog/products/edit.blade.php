@@ -1,4 +1,8 @@
 <x-admin-layout>
+    <x-slot:pageTitle>
+        Edit product {{ $product->name }}
+    </x-slot:pageTitle>
+
     <div class="p-4">
         <form action="{{ route('admin.catalog.products.update', $product->id) }}" method="POST" enctype="multipart/form-data">
             @csrf

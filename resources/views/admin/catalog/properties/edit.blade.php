@@ -1,4 +1,8 @@
 <x-admin-layout>
+    <x-slot:pageTitle>
+        Edit property {{ $property->name }}
+    </x-slot:pageTitle>
+
     <div class="p-4">
         <form action="{{ route('admin.catalog.properties.update', $property->id) }}" method="POST" enctype="multipart/form-data">
             @csrf

@@ -1,4 +1,8 @@
 <x-admin-layout>
+    <x-slot:pageTitle>
+        Catalog properties
+    </x-slot:pageTitle>
+
     <x-slot:headControls>
         <div class="items-center justify-between block sm:flex md:divide-x md:divide-gray-100 dark:divide-gray-700">
             <div class="flex items-center mb-4 sm:mb-0">

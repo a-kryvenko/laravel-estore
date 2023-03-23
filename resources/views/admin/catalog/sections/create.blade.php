@@ -1,4 +1,8 @@
 <x-admin-layout>
+    <x-slot:pageTitle>
+        Create new section
+    </x-slot:pageTitle>
+
     <div class="p-4">
         <form action="{{ route('admin.catalog.sections.store') }}" method="POST" enctype="multipart/form-data">
             @csrf

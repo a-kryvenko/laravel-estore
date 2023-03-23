@@ -269,7 +269,11 @@
                     <div class="w-full mb-1">
                         <div class="mb-4">
                             {{ Breadcrumbs::render() }}
-                            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">All products</h1>
+                            <h1 class="text-xl font-semibold text-gray-900 sm:text-2xl dark:text-white">
+                                @isset($pageTitle)
+                                    {{ $pageTitle }}
+                                @endisset
+                            </h1>
                         </div>
 
                         @isset($headControls)
