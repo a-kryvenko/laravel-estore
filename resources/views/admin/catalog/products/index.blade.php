@@ -85,4 +85,6 @@
             @endforeach
         </x-admin.table.body>
     </x-admin.table.table>
+
+    {{ $products->links() }}
 </x-admin-layout>

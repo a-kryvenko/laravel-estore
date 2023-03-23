@@ -85,4 +85,7 @@
             @endforeach
         </x-admin.table.body>
     </x-admin.table.table>
+
+    {{ $properties->links() }}
+
 </x-admin-layout>

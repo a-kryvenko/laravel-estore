@@ -16,9 +16,8 @@ class AdminPropertyController extends Controller
      */
     public function index()
     {
-        $properties = Property::latest()->get();
         return view('admin.catalog.properties.index', [
-            'properties' => $properties
+            'properties' => Property::latest()->paginate(25)
         ]);
     }
 

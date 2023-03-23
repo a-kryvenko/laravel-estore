@@ -79,4 +79,6 @@
             @endforeach
         </x-admin.table.body>
     </x-admin.table.table>
+
+    {{ $sections->links() }}
 </x-admin-layout>
