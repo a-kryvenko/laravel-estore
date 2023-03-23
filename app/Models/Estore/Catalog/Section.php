@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\MediaLibrary\MediaCollections\Models\Concerns\HasUuid;
 
@@ -20,6 +21,11 @@ class Section extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(Section::class, 'parent_section_id');
+    }
+
+    public function sections(): HasMany
+    {
+        return $this->hasMany(Section::class, 'parent_section_id');
     }
 
     public function products(): HasManyThrough

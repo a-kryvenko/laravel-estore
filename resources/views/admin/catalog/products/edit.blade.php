@@ -8,6 +8,13 @@
                 <x-form.fields-list :fields="$fields"/>
             </div>
 
+            <x-admin.catalog.sections-dropdown
+                :name="'canonical_section_id'"
+                :label="'Canonical section'"
+                :currentSectionId="'-1'"
+                :selected="[old('canonical_section_id') ?: ($product->canonicalSection?->id ?: 0)]"
+            />
+
             <h3>Properties</h3>
 
             <div>

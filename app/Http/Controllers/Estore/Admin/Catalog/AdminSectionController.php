@@ -19,7 +19,9 @@ class AdminSectionController extends Controller
      */
     public function index()
     {
-        return view('admin.catalog.sections.index', Section::orderBy('id')->paginate(25));
+        return view('admin.catalog.sections.index', [
+            'sections' => Section::orderBy('name')->paginate(25)
+        ]);
     }
 
     /**
@@ -56,7 +58,7 @@ class AdminSectionController extends Controller
      */
     public function show(Section $section)
     {
-        //
+        return redirect()->route('admin.catalog.sections.edit', $section->id);
     }
 
     /**
@@ -109,7 +111,7 @@ class AdminSectionController extends Controller
             ['type' => PropertyType::STRING, 'label' => 'Sort', 'name' => 'sort', 'value' => old('sort') ?? $section->sort ?? ''],
             ['type' => PropertyType::STRING, 'label' => 'Name', 'name' => 'name', 'value' => old('name') ?? $section->name ?? ''],
             ['type' => PropertyType::STRING, 'label' => 'Slug', 'name' => 'slug', 'value' => old('slug') ?? $section->slug ?? ''],
-            ['type' => PropertyType::STRING, 'label' => 'Parent section', 'name' => 'parent_section_id', 'value' => old('parent_section_id') ?? $section->parent_section_id ?? ''],
+//            ['type' => PropertyType::STRING, 'label' => 'Parent section', 'name' => 'parent_section_id', 'value' => old('parent_section_id') ?? $section->parent_section_id ?? ''],
             ['type' => PropertyType::TEXT, 'label' => 'Description', 'name' => 'description', 'value' => old('description') ?? $section->description ?? ''],
         ];
     }
