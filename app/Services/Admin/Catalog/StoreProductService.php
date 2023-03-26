@@ -51,13 +51,12 @@ class StoreProductService
             DB::beginTransaction();
 
             $product->update($request->safe()->except(['properties', 'sections', 'images']));
-
             $propertiesRequest = $request->safe()->only('properties');
             $imagesRequest = $request->safe()->only('images');
             $this->setDataFromRequest(
                 $product,
-                isset($propertiesRequest['properties']) ? $propertiesRequest['properties'] : null,
-                isset($imagesRequest['images']) ? $imagesRequest['images'] : null
+                $propertiesRequest['properties'] ?? null,
+                $imagesRequest['images'] ?? null
             );
 
             DB::commit();
@@ -110,9 +109,10 @@ class StoreProductService
         }
 
         if (!empty($images)) {
-            foreach ($images as $image) {
-                $product->addMediaFromRequest($image)->toMediaCollection('images');
-            }
+            $product->addMultipleMediaFromRequest(['images'])
+                ->each(function($fileAdder) {
+                    $fileAdder->toMediaCollection('images');
+                });
         }
     }
 }

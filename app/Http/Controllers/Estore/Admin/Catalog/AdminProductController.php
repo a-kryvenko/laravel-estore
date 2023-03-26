@@ -89,7 +89,7 @@ class AdminProductController extends Controller
                 return redirect()->route('admin.catalog.products.index')->with('success', 'Product has ben created');
             }
         } catch (Exception $e) {
-            return redirect()->route('admin.catalog.products.create')
+            return redirect()->route('admin.catalog.products.edit', $product->id)
                 ->withInput()
                 ->withErrors(['storing_error' => $e->getMessage()]);
         }
@@ -123,8 +123,26 @@ class AdminProductController extends Controller
             ];
         }
 
+        $photos = [];
+        foreach($product->getMedia('images') as $media) {
+            $photos[] = [
+                'name' => $media->name,
+                'file_name' => $media->file_name,
+                'id' => $media->id,
+                'uuid' => $media->uuid,
+                'preview_url' => $media->preview_url,
+                'original_url' => $media->original_url,
+                'order' => $media->order_column,
+                'custom_properties' => $media->custom_properties,
+                'extension' => $media->extension,
+                'size' => $media->size,
+                'type' => $media->mime_type,
+                'src' => $media->getUrl()
+            ];
+        }
+
         return [
-            ['type' => PropertyType::FILE, 'label' => 'Images', 'name' => 'images', 'multiple' => true, 'values' => []],
+            ['type' => PropertyType::FILE, 'label' => 'Images', 'name' => 'images', 'multiple' => true, 'values' => $photos],
             ['type' => PropertyType::STRING, 'label' => 'Sort', 'name' => 'sort', 'value' => old('sort') ?? $product->sort ?? ''],
             ['type' => PropertyType::ENUM, 'label' => 'Status', 'name' => 'status', 'options' => $statuses],
             ['type' => PropertyType::STRING, 'label' => 'SKU', 'name' => 'sku', 'value' => old('sku') ?? $product->sku ?? ''],

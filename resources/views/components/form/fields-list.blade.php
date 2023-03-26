@@ -8,11 +8,13 @@
         @if(isset($field['multiple']) && $field['multiple'])
             @switch($field['type'])
                 @case(PropertyType::FILE)
-                    <x-form.multiple-input-file
-                        :label="$field['label']"
-                        :name="$field['name']"
-                        :value="''"
-                    />
+                    <div>
+                        <x-form.files-drag-and-drop
+                            :label="$field['label']"
+                            :name="$field['name']"
+                            :values="$field['values']"
+                        />
+                    </div>
                     @break
                 @case(PropertyType::TEXT)
                     <x-form.multiple-textarea
