@@ -38,7 +38,8 @@ class UpdateProductRequest extends FormRequest
             'package' => 'nullable|string',
             'description' => 'nullable|string',
             'properties.*' => 'nullable',
-            'images.*' => 'nullable|image'
+            'images.*' => 'nullable|image',
+            'imagesRemoved.*' => 'nullable|integer'
         ];
     }
 }

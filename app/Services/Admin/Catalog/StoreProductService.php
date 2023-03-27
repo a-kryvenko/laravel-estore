@@ -27,7 +27,8 @@ class StoreProductService
             $this->setDataFromRequest(
                 $product,
                 isset($propertiesRequest['properties']) ? $propertiesRequest['properties'] : null,
-                isset($imagesRequest['images']) ? $imagesRequest['images'] : null
+                isset($imagesRequest['images']) ? $imagesRequest['images'] : null,
+                null
             );
 
             DB::commit();
@@ -53,10 +54,13 @@ class StoreProductService
             $product->update($request->safe()->except(['properties', 'sections', 'images']));
             $propertiesRequest = $request->safe()->only('properties');
             $imagesRequest = $request->safe()->only('images');
+            $deleteImagesRequest = $request->safe()->only('imagesRemoved');
+
             $this->setDataFromRequest(
                 $product,
                 $propertiesRequest['properties'] ?? null,
-                $imagesRequest['images'] ?? null
+                $imagesRequest['images'] ?? null,
+                $deleteImagesRequest['imagesRemoved'] ?? null
             );
 
             DB::commit();
@@ -83,7 +87,12 @@ class StoreProductService
         }
     }
 
-    private function setDataFromRequest(Product $product, ?array $properties, ?array $images): void
+    private function setDataFromRequest(
+        Product $product,
+        ?array $properties,
+        ?array $images,
+        ?array $removedImagesIds
+    ): void
     {
         if (!empty($properties)) {
             foreach ($properties as $propertyId => $propertyValues) {
@@ -113,6 +122,14 @@ class StoreProductService
                 ->each(function($fileAdder) {
                     $fileAdder->toMediaCollection('images');
                 });
+        }
+
+        if (!empty($removedImagesIds)) {
+            foreach ($removedImagesIds as $mediaId) {
+                if (intval($mediaId) > 0) {
+                    $product->deleteMedia($mediaId);
+                }
+            }
         }
     }
 }

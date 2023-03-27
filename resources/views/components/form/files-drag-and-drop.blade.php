@@ -39,15 +39,15 @@
         </div>
 
         <template x-if="removedFiles.length > 0">
-            <template x-for="(removedFile, index) in Array.from({ length: removedFiles.length })">
-                <input type="hidden" name="{{ $name }}Removed[]" ::value="removedFile.id">
+            <template x-for="removedFile in removedFiles">
+                <input type="hidden" name="{{ $name }}Removed[]" :value="removedFile">
             </template>
         </template>
 
         <template x-if="files.length > 0">
             <div class="grid grid-cols-2 gap-4 mt-4 md:grid-cols-6" @drop.prevent="drop($event)"
                  @dragover.prevent="$event.dataTransfer.dropEffect = 'move'">
-                <template x-for="(_, index) in Array.from({ length: files.length })">
+                <template x-for="(file, index) in files">
                     <div
                         class="relative flex flex-col items-center overflow-hidden text-center bg-gray-100 border rounded cursor-move select-none"
                         style="padding-top: 100%;" @dragstart="dragstart($event)" @dragend="fileDragging = null"
@@ -60,7 +60,7 @@
                                       d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                             </svg>
                         </button>
-                        <template x-if="files[index].type.includes('audio/')">
+                        <template x-if="file.type.includes('audio/')">
                             <svg class="absolute w-12 h-12 text-gray-400 transform top-1/2 -translate-y-2/3"
                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor">
@@ -68,7 +68,7 @@
                                       d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
                             </svg>
                         </template>
-                        <template x-if="files[index].type.includes('application/') || files[index].type === ''">
+                        <template x-if="file.type.includes('application/') || file.type === ''">
                             <svg class="absolute w-12 h-12 text-gray-400 transform top-1/2 -translate-y-2/3"
                                  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                  stroke="currentColor">
@@ -76,25 +76,25 @@
                                       d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                             </svg>
                         </template>
-                        <template x-if="files[index].type.includes('image/') && !files[index].id">
+                        <template x-if="file.type.includes('image/') && !file.id">
                             <img class="absolute inset-0 z-0 object-cover w-full h-full border-4 border-white preview"
-                                 x-bind:src="loadFile(files[index])"/>
+                                 x-bind:src="loadFile(file)"/>
                         </template>
-                        <template x-if="files[index].type.includes('image/') && files[index].id">
+                        <template x-if="file.type.includes('image/') && file.id">
                             <img class="absolute inset-0 z-0 object-cover w-full h-full border-4 border-white preview"
-                                 x-bind:src="files[index].src"/>
+                                 x-bind:src="file.src"/>
                         </template>
-                        <template x-if="files[index].type.includes('video/')">
+                        <template x-if="file.type.includes('video/')">
                             <video
                                 class="absolute inset-0 object-cover w-full h-full border-4 border-white pointer-events-none preview">
-                                <fileDragging x-bind:src="loadFile(files[index])" type="video/mp4">
+                                <fileDragging x-bind:src="loadFile(file)" type="video/mp4">
                             </video>
                         </template>
 
                         <div class="absolute bottom-0 left-0 right-0 flex flex-col p-2 text-xs bg-white bg-opacity-50">
                         <span class="w-full font-bold text-gray-900 truncate"
-                              x-text="files[index].name">Loading</span>
-                            <span class="text-xs text-gray-900" x-text="humanFileSize(files[index].size)">...</span>
+                              x-text="file.name">Loading</span>
+                            <span class="text-xs text-gray-900" x-text="humanFileSize(file.size)">...</span>
                         </div>
 
                         <div class="absolute inset-0 z-40 transition-colors duration-300" @dragenter="dragenter($event)"
@@ -124,8 +124,13 @@
             }
         }
         return function () {
-            for (var n = t.apply([], arguments), r = 0, o = n.length, i = e(); r < o; r++) i.items.add(n[r]);
-            return i.files
+            for (var n = t.apply([], arguments), r = 0, o = n.length, i = e(); r < o; r++) {
+                if (!n[r].id) {
+                    i.items.add(n[r]);
+                }
+            }
+
+            return n;
         }
     }));
 </script>
@@ -134,7 +139,7 @@
 
     function dataFileDnD() {
         return {
-            files: [],
+            files: oldFiles,
             removedFiles: [],
             fileDragging: null,
             fileDropping: null,
