@@ -7,9 +7,14 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
     $trail->push('Home', route('admin.dashboard'));
 });
-Breadcrumbs::for('admin.catalog.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin.dashboard');
-    $trail->push('Catalog', route('admin.catalog.index'));
+Breadcrumbs::for('admin.catalog.index', function (BreadcrumbTrail $trail, ?Section $section) {
+    if ($section) {
+        $trail->parent('admin.catalog.index', $section->parent);
+        $trail->push($section->name, route('admin.catalog.index', $section->id));
+    } else {
+        $trail->parent('admin.dashboard');
+        $trail->push('Catalog', route('admin.catalog.index'));
+    }
 });
 
 // Breadcrumbs for admin products list
