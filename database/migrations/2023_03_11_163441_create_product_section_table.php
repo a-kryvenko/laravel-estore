@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('product_sections', function (Blueprint $table) {
+        Schema::create('product_section', function (Blueprint $table) {
             $table->id();
             $table->integer('product_id');
             $table->integer('section_id');
+            $table->boolean('primary')->default(false);
         });
     }
 

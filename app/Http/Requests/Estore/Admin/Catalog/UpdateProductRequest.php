@@ -28,6 +28,7 @@ class UpdateProductRequest extends FormRequest
             'name' => 'required|string',
             'slug' => 'required|string',
             'canonical_section' => 'nullable|integer',
+            'sections.*' => 'nullable|integer',
             'purchasing_price' => 'required|numeric',
             'base_price' => 'required|numeric',
             'discount_price' => 'nullable|numeric',

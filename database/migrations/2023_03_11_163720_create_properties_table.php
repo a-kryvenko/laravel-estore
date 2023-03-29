@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('type');
             $table->boolean('multiple')->default(false);
             $table->string('view_format')->nullable();
-            $table->integer('updated_by')->nullable();
         });
     }
 

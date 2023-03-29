@@ -2,13 +2,11 @@
 
 namespace App\Models\Estore\Catalog;
 
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Spatie\MediaLibrary\MediaCollections\Models\Concerns\HasUuid;
 
 class Section extends Model
@@ -31,12 +29,7 @@ class Section extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(ProductSection::class);
-    }
-
-    public function editor(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsToMany(Product::class);
     }
 
     public function uniqueIds()
@@ -47,7 +40,7 @@ class Section extends Model
     protected static function booted()
     {
         static::deleted(function (Section $section) {
-            $section->products()->detach();
+            ProductSection::where('section_id', $section->id)->delete();
             $section->sections()->delete();
         });
     }

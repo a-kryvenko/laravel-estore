@@ -18,12 +18,6 @@ class Warehouse extends Model
         return $this->hasManyThrough(WarehouseProductQuantity::class, Product::class);
     }
 
-    public function editor(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
-
-
     protected static function booted(): void
     {
         static::deleted(function (Warehouse $warehouse) {

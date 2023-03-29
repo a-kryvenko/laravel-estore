@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer('sort')->default(100);
             $table->string('name');
             $table->string('slug');
-            $table->integer('updated_by')->nullable();
         });
     }
 

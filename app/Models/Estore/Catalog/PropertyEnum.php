@@ -2,7 +2,6 @@
 
 namespace App\Models\Estore\Catalog;
 
-use App\Traits\HasUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,11 +9,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Concerns\HasUuid;
 
 class PropertyEnum extends Model
 {
-    use HasFactory, HasUuid, HasUpdatedBy;
+    use HasFactory, HasUuid;
 
     protected $guarded = [
-        'uuid',
-        'updated_by'
+        'uuid'
     ];
 
     public function property(): BelongsTo

@@ -33,7 +33,8 @@ class AdminProductController extends Controller
         $product = new Product();
         return view('admin.catalog.products.create', [
             'fields' => $this->getFormFields($product),
-            'properties' => $this->getFormProperties($product)
+            'properties' => $this->getFormProperties($product),
+            'sections' => []
         ]);
     }
 
@@ -72,14 +73,15 @@ class AdminProductController extends Controller
         return view('admin.catalog.products.edit', [
             'product' => $product,
             'fields' => $this->getFormFields($product),
-            'properties' => $this->getFormProperties($product)
+            'properties' => $this->getFormProperties($product),
+            'sections' => $product->sections()->allRelatedIds()?->toArray() ?: []
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateProductRequest $request, Product $product, StoreProductService $service)
+    public function update(StoreProductRequest $request, Product $product, StoreProductService $service)
     {
         try {
             $service->update($product, $request);

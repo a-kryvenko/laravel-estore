@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('sku')->nullable();
             $table->string('name');
             $table->string('slug');
-            $table->integer('canonical_section_id')->nullable();
             $table->float('purchasing_price')->nullable();
             $table->float('base_price');
             $table->float('discount_price')->nullable();
@@ -31,7 +30,6 @@ return new class extends Migration
             $table->integer('weight')->nullable();
             $table->integer('package_id')->nullable();
             $table->text('description')->nullable();
-            $table->integer('updated_by')->nullable();
             $table->integer('views_count')->default(0);
         });
     }

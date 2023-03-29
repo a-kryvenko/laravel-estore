@@ -3,23 +3,21 @@
 namespace App\Models\Estore\Catalog;
 
 use App\Enums\Catalog\ProductStatus;
-use App\Traits\HasUpdatedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Concerns\HasUuid;
 
 class Product extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, HasUuid, HasUpdatedBy;
+    use HasFactory, InteractsWithMedia, HasUuid;
 
     protected $guarded = [
         'uuid',
-        'updated_by',
         'available'
     ];
 
@@ -32,9 +30,16 @@ class Product extends Model implements HasMedia
         'views_count' => 0
     ];
 
-    public function canonicalSection(): BelongsTo
+    public function canonicalSection(): HasOneThrough
     {
-        return $this->belongsTo(Section::class, 'canonical_section_id');
+        return $this->hasOneThrough(
+            Section::class,
+            ProductSection::class,
+            'product_id',
+            'id',
+            'id',
+            'section_id'
+        );
     }
 
     public function sections(): BelongsToMany
@@ -55,11 +60,18 @@ class Product extends Model implements HasMedia
         return $this->hasMany(ProductPropertyValue::class);
     }
 
+    public function warehouses(): BelongsToMany
+    {
+        return $this->belongsToMany(Warehouse::class)
+            ->as('storage')
+            ->withPivot('quantity');
+    }
+
     protected static function booted(): void
     {
         static::deleted(function (Product $product) {
-            $product->properties()->detach();
-            $product->sections()->detach();
+            ProductPropertyValue::where('product_id', $product->id)->delete();
+            ProductSection::where('product_id', $product->id)->delete();
         });
     }
 

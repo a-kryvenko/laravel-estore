@@ -3,7 +3,6 @@
 namespace App\Services\Admin\Catalog;
 
 use App\Http\Requests\Estore\Admin\Catalog\StoreProductRequest;
-use App\Http\Requests\Estore\Admin\Catalog\UpdateProductRequest;
 use App\Models\Estore\Catalog\Product;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -21,15 +20,7 @@ class StoreProductService
             DB::beginTransaction();
 
             $product = Product::create($request->safe()->except(['properties', 'sections', 'images']));
-
-            $propertiesRequest = $request->safe()->only('properties');
-            $imagesRequest = $request->safe()->only('images');
-            $this->setDataFromRequest(
-                $product,
-                isset($propertiesRequest['properties']) ? $propertiesRequest['properties'] : null,
-                isset($imagesRequest['images']) ? $imagesRequest['images'] : null,
-                null
-            );
+            $this->setDataFromRequest($product, $request);
 
             DB::commit();
         } catch (Exception $e) {
@@ -42,26 +33,17 @@ class StoreProductService
 
     /**
      * @param Product $product
-     * @param UpdateProductRequest $request
+     * @param StoreProductRequest $request
      * @return void
      * @throws Exception
      */
-    public function update(Product $product, UpdateProductRequest $request)
+    public function update(Product $product, StoreProductRequest $request)
     {
         try {
             DB::beginTransaction();
 
             $product->update($request->safe()->except(['properties', 'sections', 'images']));
-            $propertiesRequest = $request->safe()->only('properties');
-            $imagesRequest = $request->safe()->only('images');
-            $deleteImagesRequest = $request->safe()->only('imagesRemoved');
-
-            $this->setDataFromRequest(
-                $product,
-                $propertiesRequest['properties'] ?? null,
-                $imagesRequest['images'] ?? null,
-                $deleteImagesRequest['imagesRemoved'] ?? null
-            );
+            $this->setDataFromRequest($product, $request);
 
             DB::commit();
         } catch (Exception $e) {
@@ -89,47 +71,74 @@ class StoreProductService
 
     private function setDataFromRequest(
         Product $product,
-        ?array $properties,
-        ?array $images,
-        ?array $removedImagesIds
+        StoreProductRequest $request
     ): void
     {
-        if (!empty($properties)) {
-            foreach ($properties as $propertyId => $propertyValues) {
-                if (empty($propertyValues)) {
-                    continue;
-                }
-                if (is_array($propertyValues)) {
-                    foreach ($propertyValues as $value) {
-                        if (!empty($value)) {
-                            $product->propertyValues()->firstOrCreate(
-                                ['property_id' => $propertyId],
-                                ['value' => $value]
-                            );
-                        }
+        $this->setProperties($product, $request);
+        $this->setImages($product, $request);
+        $this->setSections($product, $request);
+
+        $product->save();
+    }
+
+    private function setProperties(Product $product, StoreProductRequest $request): void
+    {
+        $properties = $request->safe()->only('properties');
+        $properties = $properties['properties'] ?? [];
+
+        foreach ($properties as $propertyId => $propertyValues) {
+            if (empty($propertyValues)) {
+                continue;
+            }
+            if (is_array($propertyValues)) {
+                foreach ($propertyValues as $value) {
+                    if (!empty($value)) {
+                        $product->propertyValues()->firstOrCreate(
+                            ['property_id' => $propertyId],
+                            ['value' => $value]
+                        );
                     }
-                } else {
-                    $product->propertyValues()->firstOrCreate(
-                        ['property_id' => $propertyId],
-                        ['value' => $propertyValues]
-                    );
                 }
+            } else {
+                $product->propertyValues()->firstOrCreate(
+                    ['property_id' => $propertyId],
+                    ['value' => $propertyValues]
+                );
             }
         }
+    }
 
-        if (!empty($images)) {
+    private function setImages(Product $product, StoreProductRequest $request): void
+    {
+        if ($request->images) {
             $product->addMultipleMediaFromRequest(['images'])
                 ->each(function($fileAdder) {
                     $fileAdder->toMediaCollection('images');
                 });
         }
 
-        if (!empty($removedImagesIds)) {
-            foreach ($removedImagesIds as $mediaId) {
-                if (intval($mediaId) > 0) {
-                    $product->deleteMedia($mediaId);
-                }
+        $removedImages = $request->safe()->only('imagesRemoved');
+        $removedImages = $removedImages['imagesRemoved'] ?? [];
+
+        foreach ($removedImages as $mediaId) {
+            if (intval($mediaId) > 0) {
+                $product->deleteMedia($mediaId);
             }
+        }
+    }
+
+    private function setSections(Product $product, StoreProductRequest $request): void
+    {
+        $sections = $request->safe()->only('sections');
+        $sections = $sections['sections'] ?? [];
+
+        $primarySection = $request->canonicalSectionId ?? false;
+
+        $product->sections()->detach();
+        $product->sections()->attach($sections ?: [], ['primary' => false]);
+
+        if ($primarySection) {
+            $product->sections()->updateExistingPivot($primarySection, ['primary' => true]);
         }
     }
 }
