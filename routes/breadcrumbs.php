@@ -7,19 +7,24 @@ use Diglactic\Breadcrumbs\Generator as BreadcrumbTrail;
 Breadcrumbs::for('admin.dashboard', function (BreadcrumbTrail $trail) {
     $trail->push('Home', route('admin.dashboard'));
 });
-Breadcrumbs::for('admin.catalog.index', function (BreadcrumbTrail $trail, ?Section $section) {
+
+Breadcrumbs::for('admin.catalog.dashboard', function (BreadcrumbTrail $trail) {
+    $trail->parent('admin.dashboard');
+    $trail->push('Catalog', route('admin.dashboard'));
+});
+Breadcrumbs::for('admin.catalog.list', function (BreadcrumbTrail $trail, ?Section $section = null) {
     if ($section) {
-        $trail->parent('admin.catalog.index', $section->parent);
-        $trail->push($section->name, route('admin.catalog.index', $section->id));
+        $trail->parent('admin.catalog.list', $section->parent);
+        $trail->push($section->name, route('admin.catalog.list', $section->id));
     } else {
         $trail->parent('admin.dashboard');
-        $trail->push('Catalog', route('admin.catalog.index'));
+        $trail->push('Catalog', route('admin.catalog.list'));
     }
 });
 
 // Breadcrumbs for admin products list
 Breadcrumbs::for('admin.catalog.products.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin.catalog.index');
+    $trail->parent('admin.catalog.dashboard');
     $trail->push('Products', route('admin.catalog.products.index'));
 });
 Breadcrumbs::for('admin.catalog.products.create', function (BreadcrumbTrail $trail) {
@@ -33,7 +38,7 @@ Breadcrumbs::for('admin.catalog.products.edit', function (BreadcrumbTrail $trail
 
 // Breadcrumbs for admin properties list
 Breadcrumbs::for('admin.catalog.properties.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin.catalog.index');
+    $trail->parent('admin.catalog.dashboard');
     $trail->push('Properties', route('admin.catalog.properties.index'));
 });
 Breadcrumbs::for('admin.catalog.properties.create', function (BreadcrumbTrail $trail) {
@@ -47,7 +52,7 @@ Breadcrumbs::for('admin.catalog.properties.edit', function (BreadcrumbTrail $tra
 
 // Breadcrumbs for admin sections list
 Breadcrumbs::for('admin.catalog.sections.index', function (BreadcrumbTrail $trail) {
-    $trail->parent('admin.catalog.index');
+    $trail->parent('admin.catalog.dashboard');
     $trail->push('Sections', route('admin.catalog.sections.index'));
 });
 Breadcrumbs::for('admin.catalog.sections.create', function (BreadcrumbTrail $trail) {

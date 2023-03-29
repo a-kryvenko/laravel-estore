@@ -66,7 +66,7 @@
                     <x-admin.table.td></x-admin.table.td>
                     <x-admin.table.td>
                         <div class="text-base font-semibold text-gray-900 dark:text-white">
-                            <a href="{{ route('admin.catalog.index', $section->parent?->id) }}">..</a>
+                            <a href="{{ route('admin.catalog.list', $section->parent?->id) }}">..</a>
                         </div>
                     </x-admin.table.td>
                     <x-admin.table.td></x-admin.table.td>
@@ -92,7 +92,7 @@
                     <x-admin.table.td></x-admin.table.td>
                     <x-admin.table.td>
                         <div class="text-base font-semibold text-gray-900 dark:text-white">
-                            <a href="{{ route('admin.catalog.index', $section->id) }}">{{ $section->name }}</a>
+                            <a href="{{ route('admin.catalog.list', $section->id) }}">{{ $section->name }}</a>
                         </div>
                     </x-admin.table.td>
                     <x-admin.table.td></x-admin.table.td>

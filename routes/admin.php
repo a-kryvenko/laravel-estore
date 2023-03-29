@@ -15,9 +15,11 @@ Route::name('admin.')
         Route::name('catalog.')
             ->prefix('catalog')
             ->group(function () {
-                Route::get('/{section?}', [AdminCatalogController::class, 'index'])
+                Route::get('/', [AdminCatalogController::class, 'dashboard'])
+                    ->name('dashboard');
+                Route::get('/list/{section?}', [AdminCatalogController::class, 'index'])
                     ->whereNumber('section')
-                    ->name('index');
+                    ->name('list');
                 Route::resources([
                     'properties' => AdminPropertyController::class,
                     'sections' => AdminSectionController::class,
