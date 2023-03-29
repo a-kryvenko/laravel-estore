@@ -15,8 +15,17 @@
             <x-admin.catalog.sections-dropdown
                 :name="'canonical_section_id'"
                 :label="'Canonical section'"
+                :only="$sections"
                 :currentSectionId="'-1'"
-                :selected="[old('canonical_section_id') ?: ($product->canonicalSection?->id ?: 0)]"
+                :selected="[old('canonical_section_id', 0)]"
+            />
+
+            <x-admin.catalog.sections-dropdown
+                :name="'sections'"
+                :label="'Sections'"
+                :currentSectionId="'-1'"
+                :multiple="true"
+                :selected="old('sections', $sections, [0])"
             />
 
             <h3>Properties</h3>
