@@ -8,13 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Concerns\HasUuid;
 
 class Product extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia, HasUuid;
+    use HasFactory, InteractsWithMedia, HasUuid, LogsActivity;
 
     protected $guarded = [
         'uuid',
@@ -29,6 +31,14 @@ class Product extends Model implements HasMedia
         'sort' => 100,
         'views_count' => 0
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'slug', 'purchasing_price', 'base_price', 'discount_price'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function canonicalSection(): HasOneThrough
     {
