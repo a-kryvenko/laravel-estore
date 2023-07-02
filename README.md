@@ -1,4 +1,4 @@
-# Laravel Online Store
+# Laravel Online Store. Under construction
 
 ## Installation
 
